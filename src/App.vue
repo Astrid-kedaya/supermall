@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <main-tab-bar class="tab-bar"></main-tab-bar>
-    <keep-alive>
+    <!-- 排除详情页防止数据不刷新,名字是export的name属性 -->
+    <keep-alive exclude="Detail">
       <router-view></router-view>
     </keep-alive>
   </div>
