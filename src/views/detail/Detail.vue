@@ -10,9 +10,10 @@
       <detail-comment-info ref='comment' :comment-info="commentInfo"></detail-comment-info>
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
 
     <detail-bottom-bar @addCart="addToCart" />
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
+    <!-- <toast :message="message" :show='show'></toast> -->
   </div>
 </template>
 <script>
@@ -28,6 +29,9 @@ import DetailBottomBar from "./childComps/DetailBottomBar.vue";
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from "components/content/goods/GoodsList";
 import BackTop from "components/content/backTop/BackTop";
+// import Toast from "components/common/toast/Toast";
+
+import { mapActions } from "vuex";
 
 import {
   getDetail,
@@ -51,6 +55,7 @@ export default {
     GoodsList,
     DetailBottomBar,
     BackTop,
+    // Toast,
   },
   data() {
     return {
@@ -65,6 +70,8 @@ export default {
       themeTopYs: [],
       currentIndex: 0,
       isShowBackTop: false,
+      // message: "",
+      // show: false,
     };
   },
   created() {
@@ -118,6 +125,7 @@ export default {
     // console.log(this.themeTopYs);
   },
   methods: {
+    ...mapActions(["addCart"]),
     titleClick(index) {
       // console.log(index);
 
@@ -165,7 +173,26 @@ export default {
       // this.$store.cartList.push(product)
       // this.$store.commit("addCart", product);
       // 用actions
-      this.$store.dispatch("addCart", product);
+
+      // map映射
+      this.addCart(product).then((res) => {
+        // console.log(res);
+        // this.show = true;
+        // this.message = res;
+        // setTimeout(() => {
+        //   this.show = false;
+        //   this.message = "";
+        // }, 2000);
+
+        // 封装
+        this.$toast.show(res, 2000);
+        console.log(this.$toast);
+      });
+      // this.$store.dispatch("addCart", product).then(res => {
+      //   console.log(res);
+      // });
+
+      // 3.添加到购物车成功
     },
   },
 };
